@@ -7,7 +7,7 @@ function checkMail(mail) {
 
 /* ------------ Fonction qui vérifie le mot de passe (Return boolean) ------------ */
 function checkPassword(pass) {
-    let regex = /^.*(?=.{12,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[`~!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).*$;
+    let regex = /^.*(?=.{12,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[`~!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).*$/gm;
     return regex.test(pass);
 }
 /* ------------ Fin fonction qui vérifie le mot de passe ------------ */

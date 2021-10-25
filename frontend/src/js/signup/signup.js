@@ -1,3 +1,4 @@
+import {checkMail, checkPassword} from "../functions";
 
 document.getElementById("btnSignUp").onclick = function (e) {
     e.preventDefault();

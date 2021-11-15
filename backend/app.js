@@ -1,6 +1,6 @@
 
 const express = require("express"); //ExpressJS module
-const path = require("path");
+const userRoutes = require("./routes/user.js");
 const app = express();
 
 app.use(express.urlencoded({extended: true}));
@@ -14,5 +14,6 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use("/api/auth", userRoutes);
 
 module.exports = app;

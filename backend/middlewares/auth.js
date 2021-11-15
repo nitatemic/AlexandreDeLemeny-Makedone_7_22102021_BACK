@@ -19,6 +19,23 @@ exports.checkMail = (req, res, next) => {
   next();
 };
 
+exports.AllFieldsCompleted  = (req, res, next) => {
+  let mail = req.body.email;
+  let password = req.body.password;
+  let firstName = req.body.firstName;
+  let lastName = req.body.lastname;
+
+//Vérifier que les champs sont remplis
+  if (!mail || !password || !firstName || !lastName) {
+    res.status(400).json({
+      error: "Please fill in all fields",
+    });
+    return;
+  }
+  next();
+}
+
+
 //Vérifier que le token est valide
 exports.verifyToken = (req, res, next) => {
   const token = req.headers.authorization.split(" ")[1];
@@ -33,3 +50,4 @@ exports.verifyToken = (req, res, next) => {
     res.status(400);
   }
 };
+

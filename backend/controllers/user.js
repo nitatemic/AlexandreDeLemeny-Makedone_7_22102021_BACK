@@ -1,68 +1,27 @@
-const User = require("../models/user");
 const argon2 = require("argon2"); //Argon2 module (For password hashing)
 const jwt = require("jsonwebtoken");
-var mysql = require("mysql");
-
-
 require("dotenv").config();
-const db = process.env.MYSQL_CODE; //Variable pour le code de la BDD
 
-
-db.connect(function (err) {
-  if (err) {
-    console.error("error connecting: " + err.stack);
-    return;
-  }
-
-  console.log("connected as id " + db.threadId);
-});
 /* ---------- Creation d'user ---------- */
 
 exports.createUser = (req, res) => {
   let mail = req.body.email;
   let password = req.body.password;
+  let firstName = req.body.firstName;
+  let lastName = req.body.lastname;
+
 
   //Vérifier que les champs sont remplis
-  if (!mail || !password) {
+  if (!mail || !password || !firstName || !lastName) {
     res.status(400).json({
-      error: "Missing mail or password",
+      error: "Please fill in all fields",
     });
     return;
   }
 
-  //Vérifier que le mail n'est pas déjà utilisé
-  User.findOne(
-    {
-      mail: mail,
-    },
-    function (err, user) {
-      if (err) {
-        res.status(500).json({ err });
-        return;
-      }
-      if (user) {
-        res.status(400).json({ error: "Mail already used" });
-        return;
-      }
+  argon2.hash(password).then((hashedPass) => {
 
-      //Hachage du mot de passe
-
-      argon2.hash(password).then((hash) => {
-        //Création d'un nouvel utilisateur
-        const newUser = new User({
-          mail,
-          passwordHash: hash,
-        });
-
-        //Sauvegarder newUser dans la base de données grâce à Mongoose
-        newUser.save().then((response) => {
-          res.status(201).json({
-            message: "User created! Response : " + response,
-          });
-        });
-      });
-    }
-  );
+  });
 };
 
 /* ---------- Fin creation d'user ---------- */

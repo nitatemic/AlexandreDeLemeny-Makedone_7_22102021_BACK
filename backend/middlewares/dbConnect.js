@@ -4,8 +4,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // To parse the incoming requests with JSON payloads
 require("dotenv").config();
 
-var mysql = require('mysql');
-var pool  = mysql.createPool({
+let mysql = require('mysql');
+let pool  = mysql.createPool({
     host     : process.env.MYSQL_HOST,
     user     : process.env.MYSQL_USER,
     password : process.env.MYSQL_PASSWORD,
@@ -29,6 +29,5 @@ exports.addUser = (firstName, lastName, mail, hashedPass) => {
 
         });
     });
-    console.log("C'est bon")
 };
 

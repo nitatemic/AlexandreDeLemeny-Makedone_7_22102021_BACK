@@ -31,3 +31,22 @@ exports.addUser = (firstName, lastName, mail, hashedPass) => {
     });
 };
 
+exports.getCredentials = async (mail) => {
+    let hash;
+    pool.getConnection(function(err, connection) {
+        if (err) throw err; // not connected!
+
+        // Use the connection
+        connection.query("SELECT Pass FROM users WHERE mail= '" + mail + "';",
+            function (error, results) {
+            console.log(results); //Si j'enlève le console.log ça ne fonctionne plus. Donc PAS TOUCHE
+                // When done with the connection, release it.
+                connection.release();
+                // Handle error after the release.
+                if (error) throw error;
+                hash = results;
+            });
+    });
+    return await hash;
+};
+

@@ -31,6 +31,17 @@ exports.AllFieldsCompleted  = (req, res, next) => {
   next();
 }
 
+exports.AllFieldsCompletedForLogin  = (req, res, next) => {
+
+//Vérifier que les champs sont remplis
+  if (!req.body.mail || !req.body.password) {
+    res.status(400).json({
+      error: "Please fill in all fields",
+    });
+    return;
+  }
+  next();
+}
 
 //Vérifier que le token est valide
 exports.verifyToken = (req, res, next) => {

@@ -1,27 +1,20 @@
 const argon2 = require("argon2"); //Argon2 module (For password hashing)
+const dbConnectMiddleware = require("../middlewares/dbConnect.js");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 /* ---------- Creation d'user ---------- */
 
 exports.createUser = (req, res) => {
-  let mail = req.body.email;
-  let password = req.body.password;
-  let firstName = req.body.firstName;
-  let lastName = req.body.lastname;
+
+  argon2.hash(req.body.password).then((hashedPass) => {
+    dbConnectMiddleware.addUser(req.body.firstName, req.body.lastName, req.body.mail, hashedPass)
+  }).then(() =>
+      res.status(201).json({
+        message: "User created!"
+      }));
 
 
-  //Vérifier que les champs sont remplis
-  if (!mail || !password || !firstName || !lastName) {
-    res.status(400).json({
-      error: "Please fill in all fields",
-    });
-    return;
-  }
-
-  argon2.hash(password).then((hashedPass) => {
-
-  });
 };
 
 /* ---------- Fin creation d'user ---------- */

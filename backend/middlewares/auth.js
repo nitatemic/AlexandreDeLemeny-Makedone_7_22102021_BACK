@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken");
 
 exports.checkMail = (req, res, next) => {
   if (
-    !req.body.email.match(
+    !req.body.mail.match(
       /^([a-z0-9]+(?:[._-][a-z0-9]+)*)@([a-z0-9]+(?:[.-][a-z0-9]+)*\.[a-z]{2,})$/i
     )
   ) {
@@ -20,13 +20,9 @@ exports.checkMail = (req, res, next) => {
 };
 
 exports.AllFieldsCompleted  = (req, res, next) => {
-  let mail = req.body.email;
-  let password = req.body.password;
-  let firstName = req.body.firstName;
-  let lastName = req.body.lastname;
 
 //Vérifier que les champs sont remplis
-  if (!mail || !password || !firstName || !lastName) {
+  if (!req.body.mail || !req.body.password || !req.body.firstName || !req.body.lastName) {
     res.status(400).json({
       error: "Please fill in all fields",
     });

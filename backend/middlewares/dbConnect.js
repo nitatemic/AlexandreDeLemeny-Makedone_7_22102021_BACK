@@ -29,5 +29,6 @@ exports.addUser = (firstName, lastName, mail, hashedPass) => {
 
         });
     });
+    console.log("C'est bon")
 };
 

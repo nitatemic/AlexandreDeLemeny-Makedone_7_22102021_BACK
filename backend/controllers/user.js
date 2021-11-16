@@ -22,12 +22,12 @@ exports.createUser = (req, res) => {
 
 /* ---------- Login ----------*/
 
-exports.login = async (req, res) => {
-
-  let hashedPass = await dbConnectMiddleware.getCredentials(req.body.mail);
-  console.log(hashedPass);
+exports.login =  (req, res) => {
+    const hashedPass =  res.locals.hashedPass;
+    console.log(hashedPass);
+    console.log("coucouSTOP");
     //Vérifier que le mot de passe est correct
-    argon2.verify(hashedPass, req.body.password).then((match) => {
+    argon2.verify(hashedPass[0].Pass, req.body.password).then((match) => {
       if (!match) {
         res.status(400).json({
           error: "Wrong password",
@@ -36,10 +36,11 @@ exports.login = async (req, res) => {
       }
 
       res.status(200).json({
-        userId: req.body.mail,
+          //TODO Aller chercher l'ID
+        userId: req.body.id,
         token: jwt.sign(
             {
-              userId: req.body.mail,
+              userId: req.body.id,
             },
             process.env.SECRET,
             {

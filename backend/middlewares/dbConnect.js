@@ -31,22 +31,21 @@ exports.addUser = (firstName, lastName, mail, hashedPass) => {
     });
 };
 
-exports.getCredentials = async (mail) => {
-    let hash;
+//FIXME Fonction pour récupérer le hash du mot de passe
+exports.getCredentials =  (req, res, next) => {
     pool.getConnection(function(err, connection) {
         if (err) throw err; // not connected!
 
         // Use the connection
-        connection.query("SELECT Pass FROM users WHERE mail= '" + mail + "';",
+        connection.query("SELECT Pass FROM users WHERE mail= '" + req.body.mail + "';",
             function (error, results) {
-            console.log(results); //Si j'enlève le console.log ça ne fonctionne plus. Donc PAS TOUCHE
                 // When done with the connection, release it.
                 connection.release();
                 // Handle error after the release.
                 if (error) throw error;
-                hash = results;
-            });
-    });
-    return await hash;
-};
+                res.locals.hashedPass = results
+                next();
+            })
+    })
 
+};

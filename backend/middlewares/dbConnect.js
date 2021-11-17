@@ -36,7 +36,7 @@ exports.getCredentials =  (req, res, next) => {
         if (err) throw err; // not connected!
 
         // Use the connection
-        connection.query("SELECT Pass FROM users WHERE mail= '" + req.body.mail + "';",
+        connection.query("SELECT Pass, PersonID FROM users WHERE mail= '" + req.body.mail + "';",
             function (error, results) {
                 // When done with the connection, release it.
                 connection.release();

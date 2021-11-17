@@ -24,8 +24,6 @@ exports.createUser = (req, res) => {
 
 exports.login =  (req, res) => {
     const hashedPass =  res.locals.hashedPass;
-    console.log(hashedPass);
-    console.log("coucouSTOP");
     //Vérifier que le mot de passe est correct
     argon2.verify(hashedPass[0].Pass, req.body.password).then((match) => {
       if (!match) {

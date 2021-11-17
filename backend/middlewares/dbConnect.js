@@ -31,7 +31,6 @@ exports.addUser = (firstName, lastName, mail, hashedPass) => {
     });
 };
 
-//FIXME Fonction pour récupérer le hash du mot de passe
 exports.getCredentials =  (req, res, next) => {
     pool.getConnection(function(err, connection) {
         if (err) throw err; // not connected!
@@ -47,5 +46,4 @@ exports.getCredentials =  (req, res, next) => {
                 next();
             })
     })
-
 };

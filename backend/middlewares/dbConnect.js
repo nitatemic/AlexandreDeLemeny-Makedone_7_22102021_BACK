@@ -42,7 +42,7 @@ exports.getCredentials =  (req, res, next) => {
                 connection.release();
                 // Handle error after the release.
                 if (error) throw error;
-                res.locals.hashedPass = results
+                res.locals.SQLResponse = results
                 next();
             })
     })

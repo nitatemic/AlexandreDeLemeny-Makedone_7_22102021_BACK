@@ -23,9 +23,9 @@ exports.createUser = (req, res) => {
 /* ---------- Login ----------*/
 
 exports.login =  (req, res) => {
-    const hashedPass =  res.locals.hashedPass;
+    const SQLResponse =  res.locals.SQLResponse;
     //Vérifier que le mot de passe est correct
-    argon2.verify(hashedPass[0].Pass, req.body.password).then((match) => {
+    argon2.verify(SQLResponse[0].Pass, req.body.password).then((match) => {
       if (!match) {
         res.status(400).json({
           error: "Wrong password",
@@ -34,11 +34,10 @@ exports.login =  (req, res) => {
       }
 
       res.status(200).json({
-          //TODO Aller chercher l'ID
-        userId: req.body.id,
+        userId: SQLResponse[0].PersonID,
         token: jwt.sign(
             {
-              userId: req.body.id,
+              userId: SQLResponse[0].PersonID,
             },
             process.env.SECRET,
             {

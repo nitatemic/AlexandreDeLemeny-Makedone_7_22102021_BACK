@@ -1,27 +1,20 @@
 const argon2 = require("argon2"); //Argon2 module (For password hashing)
 const dbConnectMiddleware = require("../middlewares/dbConnect.js");
 const jwt = require("jsonwebtoken");
-
 require("dotenv").config();
 
 /* ---------- Creation d'user ---------- */
-
 exports.createUser = (req, res) => {
-
   argon2.hash(req.body.password).then((hashedPass) => {
     dbConnectMiddleware.addUser(req.body.firstName, req.body.lastName, req.body.mail, hashedPass)
   }).then(() =>
       res.status(201).json({
         message: "User created!"
       }));
-
-
 };
-
 /* ---------- Fin creation d'user ---------- */
 
 /* ---------- Login ----------*/
-
 exports.login =  (req, res) => {
     const SQLResponse =  res.locals.SQLResponse;
     //Vérifier que le mot de passe est correct
@@ -47,3 +40,4 @@ exports.login =  (req, res) => {
       });
     })
 };
+/* ---------- Fin login ----------*/

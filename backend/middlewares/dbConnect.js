@@ -19,7 +19,7 @@ exports.addUser = (req, hashedPass) => {
         if (err) throw err; // not connected!
 
         // Use the connection
-        connection.query("INSERT INTO users VALUES(NULL, '" + req.body.firstName + "', '" + req.body.lastName + "', '" + req.body.mail + "', '" + hashedPass + "');",
+        connection.query("INSERT INTO users VALUES(NULL, '" + mysql.escape(req.body.firstName) + "', '" + mysql.escape(req.body.lastName) + "', '" + mysql.escape(req.body.mail) + "', '" + hashedPass + "');",
             function (error, results) {
             console.log(results)
             // When done with the connection, release it.
@@ -36,7 +36,7 @@ exports.getCredentials =  (req, res, next) => {
         if (err) throw err; // not connected!
 
         // Use the connection
-        connection.query("SELECT Pass, PersonID FROM users WHERE mail= '" + req.body.mail + "';",
+        connection.query("SELECT Pass, PersonID FROM users WHERE mail = '" + mysql.escape(req.body.mail) + "';",
             function (error, results) {
                 // When done with the connection, release it.
                 connection.release();
@@ -54,7 +54,7 @@ exports.addPostToDB = (req, res, next) => {
         if (err) throw err; // not connected!
 
         // Use the connection
-        connection.query("INSERT INTO posts VALUES(NULL, '" + req.body.title + "', '" + req.body.content + "', '" + req.body.author + "', NULL);",
+        connection.query("INSERT INTO posts VALUES(NULL, '" + mysql.escape(req.body.title) + "', '" + mysql.escape(req.body.content) + "', '" + mysql.escape(req.body.author) + "', NULL);",
             function (error, results) {
                 // When done with the connection, release it.
                 connection.release();

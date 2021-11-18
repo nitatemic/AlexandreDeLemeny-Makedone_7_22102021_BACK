@@ -6,7 +6,7 @@ require("dotenv").config();
 /* ---------- Creation d'user ---------- */
 exports.createUser = (req, res) => {
   argon2.hash(req.body.password).then((hashedPass) => {
-    dbConnectMiddleware.addUser(req.body.firstName, req.body.lastName, req.body.mail, hashedPass)
+    dbConnectMiddleware.addUser(req, hashedPass)
   }).then(() =>
       res.status(201).json({
         message: "User created!"

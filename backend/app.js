@@ -1,6 +1,7 @@
 
 const express = require("express"); //ExpressJS module
 const userRoutes = require("./routes/user.js");
+const postRoutes = require("./routes/post.js")
 const app = express();
 
 app.use(express.urlencoded({extended: true}));
@@ -15,5 +16,6 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/auth", userRoutes);
+app.use("/api/post", postRoutes);
 
 module.exports = app;

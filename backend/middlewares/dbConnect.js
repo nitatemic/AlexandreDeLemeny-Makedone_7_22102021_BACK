@@ -48,12 +48,31 @@ exports.getCredentials =  (req, res, next) => {
     })
 };
 
-exports.sendPostToDB =  (title, body, author, next) => {
+//Fonction qui ajoute un post à la base de données
+exports.addPostToDB = (req, res, next) => {
     pool.getConnection(function(err, connection) {
         if (err) throw err; // not connected!
 
         // Use the connection
-        connection.query("INSERT INTO posts VALUES(NULL, '" + title + "', '" + body + "', '" + author + "', NULL );",
+        connection.query("INSERT INTO posts VALUES(NULL, '" + req.body.title + "', '" + req.body.content + "', '" + req.body.author + "', NULL);",
+            function (error, results) {
+                // When done with the connection, release it.
+                connection.release();
+                // Handle error after the release.
+                if (error) throw error;
+                res.locals.SQLResponse = results
+                next();
+            })
+    })
+};
+
+//Middleware to get all posts from database
+exports.getPostFromDB = (req, res, next) => {
+    pool.getConnection(function(err, connection) {
+        if (err) throw err; // not connected!
+
+        // Use the connection
+        connection.query("SELECT * FROM posts;",
             function (error, results) {
                 // When done with the connection, release it.
                 connection.release();

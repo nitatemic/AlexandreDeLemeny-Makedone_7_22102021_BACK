@@ -36,7 +36,7 @@ exports.getCredentials =  (req, res, next) => {
         if (err) throw err; // not connected!
 
         // Use the connection
-        connection.query("SELECT Pass, PersonID FROM users WHERE mail = '" + mysql.escape(req.body.mail) + "';",
+        connection.query("SELECT Pass, PersonID FROM users WHERE mail = " + mysql.escape(req.body.mail) + ";",
             function (error, results) {
                 // When done with the connection, release it.
                 connection.release();
@@ -52,9 +52,9 @@ exports.getCredentials =  (req, res, next) => {
 exports.addPostToDB = (req, res, next) => {
     pool.getConnection(function(err, connection) {
         if (err) throw err; // not connected!
-
+        const imageUrl = "${req.protocol}://${req.get("host")}/public/images/posts/${req.file.filename}"; //FIXME : Les variables veulent pas être des variables.
         // Use the connection
-        connection.query("INSERT INTO posts VALUES(NULL, '" + mysql.escape(req.body.title) + "', '" + mysql.escape(req.body.content) + "', '" + mysql.escape(req.body.author) + "', NULL);",
+        connection.query("INSERT INTO posts VALUES(NULL, '" + req.body.title + "', '" + imageUrl + "', '" + req.body.author + "', NULL);",
             function (error, results) {
                 // When done with the connection, release it.
                 connection.release();

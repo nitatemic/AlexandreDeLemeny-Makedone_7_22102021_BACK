@@ -19,6 +19,6 @@ const upload = multer({
 
 const router = express.Router();
 router.get("/", authMiddleware.verifyToken, postController.getAllPost);
-router.post("/", authMiddleware.verifyToken, upload.single('image'), postController.addPost);
+router.post("/", upload.single('image'), postController.addPost);
 
 module.exports = router;

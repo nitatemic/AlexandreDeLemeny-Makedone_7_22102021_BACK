@@ -52,7 +52,9 @@ exports.getCredentials =  (req, res, next) => {
 exports.addPostToDB = (req, res, next) => {
     pool.getConnection(function(err, connection) {
         if (err) throw err; // not connected!
-        const imageUrl = '${req.protocol}://${req.get("host")}/public/images/posts/${req.file.filename}'; //FIXME : Les variables veulent pas être des variables.
+
+        const imageUrl = `${req.protocol}://${req.get("host")}/public/images/posts/${req.file.filename}`;
+    console.log(req.body.title);
         // Use the connection
         connection.query("INSERT INTO posts VALUES(NULL, '" + req.body.title + "', '" + imageUrl + "', '" + req.body.author + "', NULL);",
             function (error, results) {
@@ -62,8 +64,8 @@ exports.addPostToDB = (req, res, next) => {
                 if (error) throw error;
                 res.locals.SQLResponse = results;
                 next();
-            })
-    })
+            });
+    });
 };
 
 //Middleware to get all posts from database

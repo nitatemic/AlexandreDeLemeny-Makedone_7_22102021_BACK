@@ -4,7 +4,7 @@ const dbConnectMiddleware = require("../middlewares/dbConnect.js");
 const postController = require("../controllers/post");
 const multer = require('multer');
 
-//Intercepter un fichier dans la requete est le stocker dans un dossier
+//Intercepter un fichier dans la requête est le stocker dans un dossier
 //On utilise multer pour stocker le fichier dans le dossier saucePic
 //On utilise multer pour filtrer les fichiers qui ne sont pas des images
 const upload = multer({

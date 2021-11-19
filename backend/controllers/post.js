@@ -9,7 +9,7 @@ exports.addPost = (req, res, next) => {
 
 
 
-//Fonction qui recupère les posts passés en parametre
+//Fonction qui récupère les posts passés en paramètre
 exports.getAllPost = (req, res) => {
-    const allPosts = res.locals.SQLResponse
+    const allPosts = res.locals.SQLResponse;
 };

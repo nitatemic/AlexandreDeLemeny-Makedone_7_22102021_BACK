@@ -1,6 +1,6 @@
-const express = require("express"); //ExpressJS module
+const express = require("express"); //ExpressJS module // jshint ignore:line
 const userRoutes = require("./routes/user.js");
-const postRoutes = require("./routes/post.js")
+const postRoutes = require("./routes/post.js");
 const isAliveRoutes = require("./routes/isAlive.js");
 const app = express();
 

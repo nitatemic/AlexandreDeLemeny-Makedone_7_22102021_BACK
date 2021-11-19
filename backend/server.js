@@ -21,7 +21,7 @@ const errorHandler = error => {
     if (error.syscall !== 'listen') {
         throw error;
     }
-    const address = server.address();
+    const address = server.address();   //Why?
 
     switch (error.code) {
         case 'EACCES':

@@ -21,7 +21,7 @@ exports.addUser = (req, hashedPass) => {
         // Use the connection
         connection.query("INSERT INTO users VALUES(NULL, '" + mysql.escape(req.body.firstName) + "', '" + mysql.escape(req.body.lastName) + "', '" + mysql.escape(req.body.mail) + "', '" + hashedPass + "');",
             function (error, results) {
-            console.log(results)
+            console.log(results);
             // When done with the connection, release it.
             connection.release();
             // Handle error after the release.
@@ -42,17 +42,17 @@ exports.getCredentials =  (req, res, next) => {
                 connection.release();
                 // Handle error after the release.
                 if (error) throw error;
-                res.locals.SQLResponse = results
+                res.locals.SQLResponse = results;
                 next();
-            })
-    })
+            });
+    });
 };
 
 //Fonction qui ajoute un post à la base de données
 exports.addPostToDB = (req, res, next) => {
     pool.getConnection(function(err, connection) {
         if (err) throw err; // not connected!
-        const imageUrl = "${req.protocol}://${req.get("host")}/public/images/posts/${req.file.filename}"; //FIXME : Les variables veulent pas être des variables.
+        const imageUrl = '${req.protocol}://${req.get("host")}/public/images/posts/${req.file.filename}'; //FIXME : Les variables veulent pas être des variables.
         // Use the connection
         connection.query("INSERT INTO posts VALUES(NULL, '" + req.body.title + "', '" + imageUrl + "', '" + req.body.author + "', NULL);",
             function (error, results) {
@@ -60,7 +60,7 @@ exports.addPostToDB = (req, res, next) => {
                 connection.release();
                 // Handle error after the release.
                 if (error) throw error;
-                res.locals.SQLResponse = results
+                res.locals.SQLResponse = results;
                 next();
             })
     })
@@ -78,8 +78,8 @@ exports.getPostFromDB = (req, res, next) => {
                 connection.release();
                 // Handle error after the release.
                 if (error) throw error;
-                res.locals.SQLResponse = results
+                res.locals.SQLResponse = results;
                 next();
-            })
-    })
+            });
+    });
 };

@@ -3,7 +3,9 @@ const userRoutes = require("./routes/user.js");
 const postRoutes = require("./routes/post.js");
 const isAliveRoutes = require("./routes/isAlive.js");
 const path = require("path");
+const helmet = require("helmet");
 const app = express();
+app.use(helmet());
 
 app.use(express.urlencoded({extended: true}));
 app.use(express.json()); // To parse the incoming requests with JSON payloads

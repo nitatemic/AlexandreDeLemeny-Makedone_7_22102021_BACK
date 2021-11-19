@@ -8,9 +8,9 @@ const multer = require('multer');
 //On utilise multer pour stocker le fichier dans le dossier saucePic
 //On utilise multer pour filtrer les fichiers qui ne sont pas des images
 const upload = multer({
-    dest: './public/images/sauces',
+    dest: './public/images/posts',
     fileFilter: function (req, file, cb) {
-        if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+        if (!file.originalname.match(/\.(gif|jpeg|png|jpg)$/)) {
             return cb(new Error('Please upload an image'));
         }
         cb(undefined, true);
@@ -19,6 +19,6 @@ const upload = multer({
 
 const router = express.Router();
 router.get("/", authMiddleware.verifyToken, postController.getAllPost);
-router.post("/", authMiddleware.verifyToken, postController.addPost);
+router.post("/", authMiddleware.verifyToken, upload.single('image'), postController.addPost);
 
 module.exports = router;

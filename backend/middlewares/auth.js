@@ -3,7 +3,7 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // To parse the incoming requests with JSON payloads
 require("dotenv").config();
-const SECRET = process.env.SECRET_KEY;
+const SECRET = process.env.SECRET;
 const jwt = require("jsonwebtoken");
 
 exports.checkMail = (req, res, next) => {
@@ -51,7 +51,9 @@ exports.verifyToken = (req, res, next) => {
       error: "You must be logged in to access this resource",
     });
   }
-  if (jwt.verify(token, SECRET)) {
+  const decoded = jwt.verify(token, SECRET);
+  if (decoded) {
+    res.locals.userId = decoded.userId;
     next();
   } else {
     res.status(400);

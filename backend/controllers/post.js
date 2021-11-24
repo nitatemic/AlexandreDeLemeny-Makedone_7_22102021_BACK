@@ -7,7 +7,11 @@ exports.addPost = (req, res, next) => {
     console.log(req.file);
     console.log(req.body.title);
     dbConnectMiddleware.addPostToDB(req, res, next);
+    res.status(201).json({
+        message: "Post added!",
+    });
 };
+
 
 
 

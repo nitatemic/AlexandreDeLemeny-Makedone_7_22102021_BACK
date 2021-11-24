@@ -27,10 +27,10 @@ exports.login =  (req, res) => {
       }
 
       res.status(200).json({
-        userId: SQLResponse[0].PersonID,
+        PersonID: SQLResponse[0].PersonID,
         token: jwt.sign(
             {
-              userId: SQLResponse[0].PersonID,
+              PersonID: SQLResponse[0].PersonID,
             },
             process.env.SECRET,
             {

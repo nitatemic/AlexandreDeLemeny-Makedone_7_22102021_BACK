@@ -1,6 +1,7 @@
 const express = require("express"); //ExpressJS module
 const userRoutes = require("./routes/user.js");
 const postRoutes = require("./routes/post.js");
+const commentRoutes = require("./routes/comment.js");
 const isAliveRoutes = require("./routes/isAlive.js");
 const path = require("path");
 const helmet = require("helmet");
@@ -21,6 +22,7 @@ app.use((req, res, next) => {
 app.use("/public", express.static(path.join(__dirname, "public")));
 app.use("/api/auth", userRoutes);
 app.use("/api/post", postRoutes);
+app.use("/api/comment", commentRoutes);
 app.use("/", isAliveRoutes);
 
 module.exports = app;

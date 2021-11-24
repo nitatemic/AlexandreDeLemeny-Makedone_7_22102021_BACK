@@ -56,7 +56,7 @@ exports.addPostToDB = (req, res, next) => {
 
         const imageUrl = `${req.protocol}://${req.get("host")}/public/images/posts/${req.file.filename}`;
         // Use the connection
-        connection.query(`INSERT INTO posts VALUES (NULL, '${mysql.escape(req.body.title)}', '${imageUrl}', '${res.locals.userId}', NULL)`,
+        connection.query(`INSERT INTO posts VALUES (NULL, '${mysql.escape(req.body.title)}', '${imageUrl}', '${res.locals.PersonID}', NULL)`,
             function (error, results) {
                 // When done with the connection, release it.
                 connection.release();
@@ -80,6 +80,40 @@ exports.getPostFromDB = (req, res, next) => {
                 // Handle error after the release.
                 if (error) throw error;
                 res.locals.allPost = results;
+                next();
+            });
+    });
+};
+
+//Fonction qui ajoute un post à la base de données
+exports.addCommentToDB = (req, res, next) => {
+    pool.getConnection(function(err, connection) {
+        if (err) throw err; // not connected!
+        // Use the connection
+        connection.query(`INSERT INTO comments VALUES (NULL, '${req.locals.PersonID}', '${mysql.escape(req.body.CommentBody)}', '${res.body.PostID}', NULL)`,
+            function (error, results) {
+                // When done with the connection, release it.
+                connection.release();
+                // Handle error after the release.
+                if (error) throw error;
+                res.locals.SQLResponse = results;
+                next();
+            });
+    });
+};
+
+//Middleware to get all comments for a post from database
+exports.getCommentFromDB = (req, res, next) => {
+    pool.getConnection(function(err, connection) {
+        if (err) throw err; // not connected!
+        // Use the connection
+        connection.query(`SELECT * FROM comments WHERE PostID = ${req.body.postID};`,
+            function (error, results) {
+                // When done with the connection, release it.
+                connection.release();
+                // Handle error after the release.
+                if (error) throw error;
+                res.locals.allComments = results;
                 next();
             });
     });

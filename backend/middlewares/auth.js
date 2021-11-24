@@ -53,7 +53,7 @@ exports.verifyToken = (req, res, next) => {
   }
   const decoded = jwt.verify(token, SECRET);
   if (decoded) {
-    res.locals.userId = decoded.userId;
+    res.locals.PersonID = decoded.PersonID;
     next();
   } else {
     res.status(400);

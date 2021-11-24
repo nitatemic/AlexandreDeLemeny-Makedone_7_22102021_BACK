@@ -1,6 +1,6 @@
 const argon2 = require("argon2"); //Argon2 module (For password hashing)
 const dbConnectMiddleware = require("../middlewares/dbConnect.js");
-const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken"); //JWT module (For token generation)
 require("dotenv").config();
 
 /* ---------- Creation d'user ---------- */

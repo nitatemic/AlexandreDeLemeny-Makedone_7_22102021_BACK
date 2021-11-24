@@ -56,7 +56,7 @@ exports.addPostToDB = (req, res, next) => {
 
         const imageUrl = `${req.protocol}://${req.get("host")}/public/images/posts/${req.file.filename}`;
         // Use the connection
-        connection.query(`INSERT INTO posts VALUES (NULL, '${req.body.title}', '${imageUrl}', '${res.locals.userId}', NULL)`,
+        connection.query(`INSERT INTO posts VALUES (NULL, '${mysql.escape(req.body.title)}', '${imageUrl}', '${res.locals.userId}', NULL)`,
             function (error, results) {
                 // When done with the connection, release it.
                 connection.release();

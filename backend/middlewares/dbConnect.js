@@ -72,15 +72,14 @@ exports.addPostToDB = (req, res, next) => {
 exports.getPostFromDB = (req, res, next) => {
     pool.getConnection(function(err, connection) {
         if (err) throw err; // not connected!
-
         // Use the connection
-        connection.query("SELECT * FROM posts;",
+        connection.query(`SELECT * FROM posts;`,
             function (error, results) {
                 // When done with the connection, release it.
                 connection.release();
                 // Handle error after the release.
                 if (error) throw error;
-                res.locals.SQLResponse = results;
+                res.locals.allPost = results;
                 next();
             });
     });

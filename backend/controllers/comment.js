@@ -6,7 +6,7 @@ require("dotenv").config();
 exports.addComment = (req, res, next) => {
     console.log(req.file);
     console.log(req.body.title);
-    dbConnectMiddleware.addPostToDB(req, res, next);
+    dbConnectMiddleware.addCommentToDB(req, res, next);
     res.status(201).json({
         message: "Comment added!",
     });

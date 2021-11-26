@@ -90,7 +90,7 @@ exports.addCommentToDB = (req, res, next) => {
     pool.getConnection(function(err, connection) {
         if (err) throw err; // not connected!
         // Use the connection
-        connection.query(`INSERT INTO comments VALUES (NULL, '${req.locals.PersonID}', '${mysql.escape(req.body.CommentBody)}', '${res.body.PostID}', NULL)`,
+        connection.query(`INSERT INTO comments VALUES (NULL, ${res.locals.PersonID}, ${mysql.escape(req.body.CommentBody)}, ${req.body.PostID}, NULL)`,
             function (error, results) {
                 // When done with the connection, release it.
                 connection.release();
@@ -101,6 +101,7 @@ exports.addCommentToDB = (req, res, next) => {
             });
     });
 };
+
 
 //Middleware to get all comments for a post from database
 exports.getCommentFromDB = (req, res, next) => {
@@ -118,3 +119,4 @@ exports.getCommentFromDB = (req, res, next) => {
             });
     });
 };
+

@@ -4,8 +4,6 @@ require("dotenv").config();
 
 //Fonction qui appel le middleware addComment pour ajouter un commentaire à la base de données
 exports.addComment = (req, res, next) => {
-    console.log(req.file);
-    console.log(req.body.title);
     dbConnectMiddleware.addCommentToDB(req, res, next);
     res.status(201).json({
         message: "Comment added!",

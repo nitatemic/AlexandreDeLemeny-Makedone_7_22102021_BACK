@@ -4,8 +4,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // To parse the incoming requests with JSON payloads
 require("dotenv").config();
 
-let mysql = require('mysql');
-let pool  = mysql.createPool({
+let mariadb = require('mariadb');
+let pool  = mariadb.createPool({
     host     : process.env.MYSQL_HOST,
     user     : process.env.MYSQL_USER,
     password : process.env.MYSQL_PASSWORD,
@@ -19,7 +19,7 @@ exports.addUser = (req, hashedPass) => {
         if (err) throw err; // not connected!
 
         // Use the connection
-        connection.query("INSERT INTO users VALUES(NULL, '" + mysql.escape(req.body.firstName) + "', '" + mysql.escape(req.body.lastName) + "', '" + mysql.escape(req.body.mail) + "', '" + hashedPass + "');",
+        connection.query("INSERT INTO users VALUES(NULL, '" + pool.escape(req.body.firstName) + "', '" + pool.escape(req.body.lastName) + "', '" + pool.escape(req.body.mail) + "', '" + hashedPass + "');",
             function (error, results) {
             console.log(results);
             // When done with the connection, release it.
@@ -36,7 +36,7 @@ exports.getCredentials =  (req, res, next) => {
         if (err) throw err; // not connected!
 
         // Use the connection
-        connection.query(`SELECT Pass, PersonID FROM users WHERE mail = ${mysql.escape(req.body.mail)};`,
+        connection.query(`SELECT Pass, PersonID FROM users WHERE mail = ${pool.escape(req.body.mail)};`,
             function (error, results) {
                 // When done with the connection, release it.
                 connection.release();
@@ -56,7 +56,7 @@ exports.addPostToDB = (req, res, next) => {
 
         const imageUrl = `${req.protocol}://${req.get("host")}/public/images/posts/${req.file.filename}`;
         // Use the connection
-        connection.query(`INSERT INTO posts VALUES (NULL, '${mysql.escape(req.body.title)}', '${imageUrl}', '${res.locals.PersonID}', NULL)`,
+        connection.query(`INSERT INTO posts VALUES (NULL, '${pool.escape(req.body.title)}', '${imageUrl}', '${res.locals.PersonID}', NULL)`,
             function (error, results) {
                 // When done with the connection, release it.
                 connection.release();
@@ -68,7 +68,24 @@ exports.addPostToDB = (req, res, next) => {
     });
 };
 
-//Middleware to get all posts from database
+//Middleware qui recuperer les posts de la base de données entre le numéro X et Y
+exports.getPostsFromTo = (req, res, next) => {
+    pool.getConnection(function(err, connection) {
+        if (err) throw err; // not connected!
+
+        // Use the connection
+        connection.query(`SELECT * FROM posts ORDER BY PostID DESC LIMIT ${req.params.from}, ${req.params.to};`,
+            function (error, results) {
+                // When done with the connection, release it.
+                connection.release();
+                // Handle error after the release.
+                if (error) throw error;
+                res.locals.SQLResponse = results;
+                next();
+            });
+    });
+};
+
 exports.getPostFromDB = (req, res, next) => {
     pool.getConnection(function(err, connection) {
         if (err) throw err; // not connected!
@@ -90,7 +107,7 @@ exports.addCommentToDB = (req, res, next) => {
     pool.getConnection(function(err, connection) {
         if (err) throw err; // not connected!
         // Use the connection
-        connection.query(`INSERT INTO comments VALUES (NULL, ${res.locals.PersonID}, ${mysql.escape(req.body.CommentBody)}, ${req.body.PostID}, NULL)`,
+        connection.query(`INSERT INTO comments VALUES (NULL, ${res.locals.PersonID}, ${pool.escape(req.body.CommentBody)}, ${req.body.PostID}, NULL)`,
             function (error, results) {
                 // When done with the connection, release it.
                 connection.release();

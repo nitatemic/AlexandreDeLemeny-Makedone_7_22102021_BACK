@@ -11,8 +11,6 @@ exports.addComment = (req, res, next) => {
 };
 
 
-
-
 //Fonction qui récupère les posts passés en paramètre
 //TODO : Renvoyer les correspondances des ID des auteurs en même temps
 exports.getAllComment = (req, res) => {

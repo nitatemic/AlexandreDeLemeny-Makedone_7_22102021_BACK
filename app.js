@@ -21,8 +21,8 @@ app.use((req, res, next) => {
 
 app.use("/public", express.static(path.join(__dirname, "public")));
 app.use("/api/auth", userRoutes);
-app.use("/api/post", postRoutes);
-app.use("/api/comment", commentRoutes);
+app.use("/api/posts", postRoutes);
+app.use("/api/comments", commentRoutes);
 app.use("/", isAliveRoutes);
 
 module.exports = app;

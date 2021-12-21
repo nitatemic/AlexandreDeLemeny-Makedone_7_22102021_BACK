@@ -4,30 +4,25 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // To parse the incoming requests with JSON payloads
 require("dotenv").config();
 
-let mariadb = require('mariadb');
+const mariadb = require('mariadb');
 let pool  = mariadb.createPool({
     host     : process.env.MYSQL_HOST,
     user     : process.env.MYSQL_USER,
     password : process.env.MYSQL_PASSWORD,
-    database : process.env.MYSQL_DATABASE
+    database : process.env.MYSQL_DATABASE,
+    timezone: 'Europe/Paris',
+    skipSetTimezone: true
 });
 
 //Add user to database
 exports.addUser = (req, hashedPass) => {
+    pool.query(`INSERT INTO users VALUES(NULL, ${pool.escape(req.body.firstName)}, ${pool.escape(req.body.lastName)}, ${pool.escape(req.body.mail)}, '${hashedPass}')`, (err, results, metadata) => {
+        if (err) {
+            //handle error
+        } else {
+            console.log(results); //[ { 'NOW()': 2018-07-02T17:06:38.000Z }, meta: [ ... ] ]
+        }
 
-    pool.getConnection(function(err, connection) {
-        if (err) throw err; // not connected!
-
-        // Use the connection
-        connection.query("INSERT INTO users VALUES(NULL, '" + pool.escape(req.body.firstName) + "', '" + pool.escape(req.body.lastName) + "', '" + pool.escape(req.body.mail) + "', '" + hashedPass + "');",
-            function (error, results) {
-            console.log(results);
-            // When done with the connection, release it.
-            connection.release();
-            // Handle error after the release.
-            if (error) throw error;
-
-        });
     });
 };
 

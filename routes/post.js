@@ -19,8 +19,12 @@ const upload = multer({
 });
 
 const router = express.Router();
-router.get("/", authMiddleware.verifyToken, dbConnectMiddleware.getPostFromDB, postController.getAllPost);
+router.get("/", dbConnectMiddleware.getPostFromDB, postController.getAllPost);
 router.post("/", authMiddleware.verifyToken, upload.single('image'), postController.addPost);
 router.get("/:from/:to", authMiddleware.verifyToken, dbConnectMiddleware.getPostsFromTo, postController.getAllPost); //Route get pour envoyer les posts du numéro X à Y
 
 module.exports = router;
+
+
+
+

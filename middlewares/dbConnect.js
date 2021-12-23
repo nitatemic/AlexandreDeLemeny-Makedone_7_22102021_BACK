@@ -70,14 +70,13 @@ exports.addUser = (req, hashedPass) => {
         });
     };
 
-
-//Middleware qui recuperer les posts de la base de données entre le numéro X et Y
 exports.getPostsFromTo = (req, res, next) => {
     pool.getConnection(function(err, connection) {
         if (err) throw err; // not connected!
 
+        const imageUrl = `${req.protocol}://${req.get("host")}/public/images/posts/${req.file.filename}`;
         // Use the connection
-        connection.query(`SELECT * FROM posts ORDER BY PostID DESC LIMIT ${req.params.from}, ${req.params.to};`,
+        connection.query(`SELECT Title, Body, CreationDate, Prenom, Nom FROM posts p INNER JOIN users u ON p.Author=u.PersonID ORDER BY p.PostID DESC LIMIT ${req.params.from}, ${req.params.to};`,
             function (error, results) {
                 // When done with the connection, release it.
                 connection.release();
@@ -90,12 +89,13 @@ exports.getPostsFromTo = (req, res, next) => {
 };
 
 
+
 //Fonction qui ajoute un post à la base de données
 exports.getPostFromDB = (req, res, next) => {
     pool.getConnection(function(err, connection) {
         if (err) throw err; // not connected!
         // Use the connection
-        connection.query(`SELECT * FROM posts;`,
+        connection.query(`SELECT Title, Body, CreationDate, Prenom, Nom FROM posts p INNER JOIN users u ON p.Author=u.PersonID ORDER BY p.PostID DESC;`,
             function (error, results) {
                 // When done with the connection, release it.
                 connection.release();

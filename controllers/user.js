@@ -17,6 +17,7 @@ exports.createUser = (req, res) => {
 /* ---------- Login ----------*/
 exports.login =  (req, res) => {
     const SQLResponse =  res.locals.SQLResponse;
+
     //Vérifier que le mot de passe est correct
     argon2.verify(SQLResponse[0].Pass, req.body.password).then((match) => {
       if (!match) {

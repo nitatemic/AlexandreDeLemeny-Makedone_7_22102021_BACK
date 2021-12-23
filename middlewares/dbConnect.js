@@ -131,7 +131,7 @@ exports.getCommentFromDB = (req, res, next) => {
     pool.getConnection(function(err, connection) {
         if (err) throw err; // not connected!
         // Use the connection
-        connection.query(`SELECT * FROM comments WHERE PostID = ${req.body.postID};`,
+        connection.query(`SELECT CommentBody, CreationDate, Prenom, Nom FROM comments c INNER JOIN users u ON c.Author=u.PersonID  WHERE c.PostID = ${req.body.postID};`,
             function (error, results) {
                 // When done with the connection, release it.
                 connection.release();

@@ -58,7 +58,7 @@ exports.addUser = (req, hashedPass) => {
 
             const imageUrl = `${req.protocol}://${req.get("host")}/public/images/posts/${req.file.filename}`;
             // Use the connection
-            connection.query(`INSERT INTO posts VALUES (NULL, '${pool.escape(req.body.title)}', '${imageUrl}', '${res.locals.PersonID}', NULL)`,
+            connection.query(`INSERT INTO posts VALUES (NULL, ${mysql.escape(req.body.title)}, '${imageUrl}', '${res.locals.PersonID}', NULL);`,
                 function (error, results) {
                     // When done with the connection, release it.
                     connection.release();
@@ -71,12 +71,14 @@ exports.addUser = (req, hashedPass) => {
     };
 
 exports.getPostsFromTo = (req, res, next) => {
+    console.log(req.query.from); //FIXME: Pas possible d'acceder aux valeurs de req.query.from et req.query.to dans la fonction
+    console.log(req.query.to);
     pool.getConnection(function(err, connection) {
         if (err) throw err; // not connected!
-
-        const imageUrl = `${req.protocol}://${req.get("host")}/public/images/posts/${req.file.filename}`;
+    console.log(req.params.from);
+    console.log(req.params.to);
         // Use the connection
-        connection.query(`SELECT Title, Body, CreationDate, Prenom, Nom FROM posts p INNER JOIN users u ON p.Author=u.PersonID ORDER BY p.PostID DESC LIMIT ${req.params.from}, ${req.params.to};`,
+        connection.query(`SELECT Title, Body, CreationDate, Prenom, Nom FROM posts p INNER JOIN users u ON p.Author=u.PersonID ORDER BY p.PostID DESC LIMIT ${req.query.from}, ${req.query.to};`,
             function (error, results) {
                 // When done with the connection, release it.
                 connection.release();

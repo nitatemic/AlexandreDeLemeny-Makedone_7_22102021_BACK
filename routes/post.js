@@ -24,3 +24,4 @@ router.post("/", authMiddleware.verifyToken, upload.single('image'), postControl
 router.get("/:from/:to", dbConnectMiddleware.getPostsFromTo, postController.getAllPost); //Route get pour envoyer les posts du numéro X à Y
 
 module.exports = router;
+

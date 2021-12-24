@@ -19,3 +19,4 @@ exports.getAllComment = (req, res) => {
         comments: res.locals.allComments,
     });
 };
+

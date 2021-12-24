@@ -18,9 +18,9 @@ exports.addPost = (req, res, next) => {
 //Fonction qui récupère les posts passés en paramètre
 //TODO : Renvoyer les correspondances des ID des auteurs en même temps
 exports.getAllPost = (req, res) => {
-    console.log(req.query.from);
+    console.log(req.params.from);
     res.status(200).json({
         message: "Posts fetched!",
-        posts: res.locals.allPost,
+        posts: res.locals.SQLResponse,
     });
 };

@@ -71,14 +71,14 @@ exports.addUser = (req, hashedPass) => {
     };
 
 exports.getPostsFromTo = (req, res, next) => {
-    console.log(req.query.from); //FIXME: Pas possible d'acceder aux valeurs de req.query.from et req.query.to dans la fonction
-    console.log(req.query.to);
+    console.log(req.params.from); //FIXME: Pas possible d'acceder aux valeurs de req.query.from et req.query.to dans la fonction
+    console.log(req.params.to);
     pool.getConnection(function(err, connection) {
         if (err) throw err; // not connected!
     console.log(req.params.from);
     console.log(req.params.to);
         // Use the connection
-        connection.query(`SELECT Title, Body, CreationDate, Prenom, Nom, PostID FROM posts p INNER JOIN users u ON p.Author=u.PersonID ORDER BY p.PostID DESC LIMIT ${req.query.from}, ${req.query.to};`,
+        connection.query(`SELECT Title, Body, CreationDate, Prenom, Nom, PostID FROM posts p INNER JOIN users u ON p.Author=u.PersonID ORDER BY p.PostID DESC LIMIT ${req.params.from}, ${req.params.to};`,
             function (error, results) {
                 // When done with the connection, release it.
                 connection.release();
@@ -97,7 +97,7 @@ exports.getPostFromDB = (req, res, next) => {
     pool.getConnection(function(err, connection) {
         if (err) throw err; // not connected!
         // Use the connection
-        connection.query(`SELECT Title, Body, CreationDate, Prenom, Nom FROM posts p INNER JOIN users u ON p.Author=u.PersonID ORDER BY p.PostID DESC;`,
+        connection.query(`SELECT Title, Body, CreationDate, Prenom, Nom, PostID FROM posts p INNER JOIN users u ON p.Author=u.PersonID ORDER BY p.PostID DESC;`,
             function (error, results) {
                 // When done with the connection, release it.
                 connection.release();
@@ -164,3 +164,4 @@ exports.getCommentsFromTo = (req, res, next) => {
             });
     });
 };
+

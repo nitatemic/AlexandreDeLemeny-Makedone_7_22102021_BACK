@@ -78,7 +78,7 @@ exports.getPostsFromTo = (req, res, next) => {
     console.log(req.params.from);
     console.log(req.params.to);
         // Use the connection
-        connection.query(`SELECT Title, Body, CreationDate, Prenom, Nom FROM posts p INNER JOIN users u ON p.Author=u.PersonID ORDER BY p.PostID DESC LIMIT ${req.query.from}, ${req.query.to};`,
+        connection.query(`SELECT Title, Body, CreationDate, Prenom, Nom, PostID FROM posts p INNER JOIN users u ON p.Author=u.PersonID ORDER BY p.PostID DESC LIMIT ${req.query.from}, ${req.query.to};`,
             function (error, results) {
                 // When done with the connection, release it.
                 connection.release();
@@ -133,7 +133,7 @@ exports.getCommentFromDB = (req, res, next) => {
     pool.getConnection(function(err, connection) {
         if (err) throw err; // not connected!
         // Use the connection
-        connection.query(`SELECT CommentBody, CreationDate, Prenom, Nom FROM comments c INNER JOIN users u ON c.Author=u.PersonID  WHERE c.PostID = ${req.body.PostID};`,
+        connection.query(`SELECT CommentBody, CreationDate, Prenom, Nom FROM comments c INNER JOIN users u ON c.Author=u.PersonID  WHERE c.PostID = ${req.query.PostID};`,
             function (error, results) {
                 // When done with the connection, release it.
                 connection.release();
@@ -153,7 +153,7 @@ exports.getCommentsFromTo = (req, res, next) => {
         console.log(req.params.from);
         console.log(req.params.to);
         // Use the connection
-        connection.query(`SELECT CommentBody, CreationDate, Prenom, Nom FROM comments c INNER JOIN users u ON c.Author=u.PersonID  WHERE c.PostID = ${req.body.PostID} ORDER BY c.CommentID DESC LIMIT ${req.query.from}, ${req.query.to};`,
+        connection.query(`SELECT CommentBody, CreationDate, Prenom, Nom FROM comments c INNER JOIN users u ON c.Author=u.PersonID  WHERE c.PostID = ${req.query.PostID} ORDER BY c.CommentID DESC LIMIT ${req.query.from}, ${req.query.to};`,
             function (error, results) {
                 // When done with the connection, release it.
                 connection.release();

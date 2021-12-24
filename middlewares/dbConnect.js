@@ -133,7 +133,7 @@ exports.getCommentFromDB = (req, res, next) => {
     pool.getConnection(function(err, connection) {
         if (err) throw err; // not connected!
         // Use the connection
-        connection.query(`SELECT CommentBody, CreationDate, Prenom, Nom FROM comments c INNER JOIN users u ON c.Author=u.PersonID  WHERE c.PostID = ${req.body.postID};`,
+        connection.query(`SELECT CommentBody, CreationDate, Prenom, Nom FROM comments c INNER JOIN users u ON c.Author=u.PersonID  WHERE c.PostID = ${req.body.PostID};`,
             function (error, results) {
                 // When done with the connection, release it.
                 connection.release();
@@ -145,3 +145,22 @@ exports.getCommentFromDB = (req, res, next) => {
     });
 };
 
+exports.getCommentsFromTo = (req, res, next) => {
+    console.log(req.query.from); //FIXME: Pas possible d'acceder aux valeurs de req.query.from et req.query.to dans la fonction
+    console.log(req.query.to);
+    pool.getConnection(function(err, connection) {
+        if (err) throw err; // not connected!
+        console.log(req.params.from);
+        console.log(req.params.to);
+        // Use the connection
+        connection.query(`SELECT CommentBody, CreationDate, Prenom, Nom FROM comments c INNER JOIN users u ON c.Author=u.PersonID  WHERE c.PostID = ${req.body.PostID} ORDER BY c.CommentID DESC LIMIT ${req.query.from}, ${req.query.to};`,
+            function (error, results) {
+                // When done with the connection, release it.
+                connection.release();
+                // Handle error after the release.
+                if (error) throw error;
+                res.locals.SQLResponse = results;
+                next();
+            });
+    });
+};

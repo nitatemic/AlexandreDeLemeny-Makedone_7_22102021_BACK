@@ -51,6 +51,7 @@ exports.addUser = (req, hashedPass) => {
         });
     };
 
+
 //Fonction qui ajoute un post à la base de données
     exports.addPostToDB = (req, res, next) => {
         pool.getConnection(function(err, connection) {
@@ -103,7 +104,7 @@ exports.getPostFromDB = (req, res, next) => {
                 connection.release();
                 // Handle error after the release.
                 if (error) throw error;
-                res.locals.allPost = results;
+                res.locals.SQLResponse = results;
                 next();
             });
     });
@@ -133,27 +134,7 @@ exports.getCommentFromDB = (req, res, next) => {
     pool.getConnection(function(err, connection) {
         if (err) throw err; // not connected!
         // Use the connection
-        connection.query(`SELECT CommentBody, CreationDate, Prenom, Nom FROM comments c INNER JOIN users u ON c.Author=u.PersonID  WHERE c.PostID = ${req.query.PostID};`,
-            function (error, results) {
-                // When done with the connection, release it.
-                connection.release();
-                // Handle error after the release.
-                if (error) throw error;
-                res.locals.allComments = results;
-                next();
-            });
-    });
-};
-
-exports.getCommentsFromTo = (req, res, next) => {
-    console.log(req.query.from); //FIXME: Pas possible d'acceder aux valeurs de req.query.from et req.query.to dans la fonction
-    console.log(req.query.to);
-    pool.getConnection(function(err, connection) {
-        if (err) throw err; // not connected!
-        console.log(req.params.from);
-        console.log(req.params.to);
-        // Use the connection
-        connection.query(`SELECT CommentBody, CreationDate, Prenom, Nom FROM comments c INNER JOIN users u ON c.Author=u.PersonID  WHERE c.PostID = ${req.query.PostID} ORDER BY c.CommentID DESC LIMIT ${req.query.from}, ${req.query.to};`,
+        connection.query(`SELECT CommentBody, CreationDate, Prenom, Nom, CommentID FROM comments c INNER JOIN users u ON c.Author=u.PersonID  WHERE c.PostID = ${req.params.PostID};`,
             function (error, results) {
                 // When done with the connection, release it.
                 connection.release();
@@ -161,6 +142,56 @@ exports.getCommentsFromTo = (req, res, next) => {
                 if (error) throw error;
                 res.locals.SQLResponse = results;
                 next();
+            });
+    });
+};
+
+exports.getCommentsFromTo = (req, res, next) => {
+    pool.getConnection(function(err, connection) {
+        if (err) throw err; // not connected!
+
+        // Use the connection
+        connection.query(`SELECT CommentBody, CreationDate, Prenom, Nom, CommentID FROM comments c INNER JOIN users u ON c.Author=u.PersonID  WHERE c.PostID = ${req.params.PostID} ORDER BY c.CommentID DESC LIMIT ${req.params.from}, ${req.params.to};`,
+            function (error, results) {
+                // When done with the connection, release it.
+                connection.release();
+                // Handle error after the release.
+                if (error) throw error;
+                res.locals.SQLResponse = results;
+                next();
+            });
+    });
+};
+
+//Fonction qui recupere l'id de l'auteur d'un commentaire et si l'ID correspond, supprimer le commentaire
+exports.deleteCommentFromDB = (req, res, next) => {
+    pool.getConnection(function(err, connection) {
+        if (err) throw err; // not connected!
+        // Use the connection
+        connection.query(`SELECT Author FROM comments WHERE CommentID = ${req.params.CommentID};`,
+            function (error, results) {
+                // When done with the connection, release it.
+                connection.release();
+                // Handle error after the release.
+                if (error) throw error;
+                if (results[0].Author === res.locals.PersonID) {
+                    pool.getConnection(function(err, connection) {
+                        if (err) throw err; // not connected!
+                        // Use the connection
+                        connection.query(`DELETE FROM comments WHERE CommentID = ${req.params.CommentID};`,
+                            function (error, results) {
+                                // When done with the connection, release it.
+                                connection.release();
+                                // Handle error after the release.
+                                if (error) throw error;
+                                res.locals.SQLResponse = results;
+                                next();
+                            });
+                    });
+                } else {
+                    res.locals.SQLResponse = "You are not the author of this comment ! You can't delete it.";
+                    next();
+                }
             });
     });
 };

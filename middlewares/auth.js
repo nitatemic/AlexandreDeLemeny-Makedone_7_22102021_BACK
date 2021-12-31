@@ -51,12 +51,15 @@ exports.verifyToken = (req, res, next) => {
       error: "You must be logged in to access this resource",
     });
   }
-  const decoded = jwt.verify(token, SECRET);
-  if (decoded) {
+  try {
+    const decoded = jwt.verify(token, SECRET);
     res.locals.PersonID = decoded.PersonID;
     next();
-  } else {
-    res.status(400);
+  } catch (error) {
+    return res.status(401).json({
+      error: "You must be logged in to access this resource",
+    });
   }
+  const decoded = jwt.verify(token, SECRET);
+  console.log(decoded);
 };
-

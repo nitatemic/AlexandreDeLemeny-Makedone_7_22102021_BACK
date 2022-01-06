@@ -42,3 +42,30 @@ exports.login =  (req, res) => {
     });
 };
 /* ---------- Fin login ----------*/
+//Renvoie un nouveau token si le token est valide
+
+exports.refreshToken = (req, res) => {
+
+    const token = req.headers.authorization.split(" ")[1];
+  jwt.verify(token, process.env.SECRET, (err, decoded) => {
+    if (err) {
+      res.status(401).json({
+        error: "Invalid token",
+      });
+      return;
+    }
+    res.status(200).json({
+      token: jwt.sign(
+          {
+            PersonID: decoded.PersonID,
+          },
+          process.env.SECRET,
+          {
+            expiresIn: "12h",
+          }
+      ),
+        message: "Posts fetched!",
+        posts: res.locals.SQLResponse,
+    });
+  });
+};

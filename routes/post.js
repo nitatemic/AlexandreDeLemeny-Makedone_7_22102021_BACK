@@ -2,6 +2,7 @@ const express = require("express");
 const authMiddleware = require("../middlewares/auth.js");
 const dbConnectMiddleware = require("../middlewares/dbConnect.js");
 const postController = require("../controllers/post");
+const userCtrl = require("../controllers/user.js");
 const multer = require('multer');
 
 
@@ -19,9 +20,9 @@ const upload = multer({
 });
 
 const router = express.Router();
-router.get("/", authMiddleware.verifyToken, dbConnectMiddleware.getPostFromDB, postController.getAllPost);
+router.get("/", authMiddleware.verifyToken, dbConnectMiddleware.getPostFromDB, postController.getAllPost, userCtrl.refreshToken);
 router.post("/", authMiddleware.verifyToken, upload.single('image'), postController.addPost);
-router.get("/:from/:to", authMiddleware.verifyToken, dbConnectMiddleware.getPostsFromTo, postController.getAllPost); //Route get pour envoyer les posts du numéro X à Y
+router.get("/:from/:to", authMiddleware.verifyToken, dbConnectMiddleware.getPostsFromTo, postController.getAllPost, userCtrl.refreshToken); //Route get pour envoyer les posts du numéro X à Y
 
 module.exports = router;
 

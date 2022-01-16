@@ -12,6 +12,7 @@ const multer = require('multer');
 const upload = multer({
     dest: './public/images/posts',
     fileFilter: function (req, file, cb) {
+        console.log(file);
         if (!file.originalname.match(/\.(gif|jpeg|png|jpg)$/)) {
             return cb(new Error('Please upload an image'));
         }
@@ -25,4 +26,3 @@ router.post("/", authMiddleware.verifyToken, upload.single('image'), postControl
 router.get("/:from/:to", authMiddleware.verifyToken, dbConnectMiddleware.getPostsFromTo, postController.getAllPost, userCtrl.refreshToken); //Route get pour envoyer les posts du numéro X à Y
 
 module.exports = router;
-

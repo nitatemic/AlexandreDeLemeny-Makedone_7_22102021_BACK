@@ -4,14 +4,13 @@ require("dotenv").config();
 
 //Fonction qui appel le middleware addPost pour ajouter un post à la base de données
 exports.addPost = (req, res, next) => {
-    console.log(req.file);
     console.log(req.body.title);
+    console.log(req.file);
     dbConnectMiddleware.addPostToDB(req, res, next);
     res.status(201).json({
         message: "Post added!",
     });
 };
-
 
 
 
@@ -21,3 +20,8 @@ exports.getAllPost = (req, res, next) => {
     console.log(req.params.from);
     next();
 };
+
+
+exports.viewReq = (req, res) => {
+    console.log(req);
+}

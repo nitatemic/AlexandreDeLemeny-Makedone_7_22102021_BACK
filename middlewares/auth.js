@@ -29,7 +29,7 @@ exports.AllFieldsCompleted  = (req, res, next) => {
     return;
   }
   next();
-}
+};
 
 exports.AllFieldsCompletedForLogin  = (req, res, next) => {
 
@@ -41,7 +41,7 @@ exports.AllFieldsCompletedForLogin  = (req, res, next) => {
     return;
   }
   next();
-}
+};
 
 //Vérifier que le token est valide
 exports.verifyToken = (req, res, next) => {

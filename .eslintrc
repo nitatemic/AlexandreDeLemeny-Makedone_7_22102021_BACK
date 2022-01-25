@@ -1,4 +1,8 @@
 
 {
-  "extends": "eslint-config-google"
+  "extends": "airbnb-base",
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  }
 }

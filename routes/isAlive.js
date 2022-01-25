@@ -1,6 +1,6 @@
-const isAliveCtrl = require("../controllers/isAlive.js");
-const express = require("express");
+const express = require('express');
+const isAliveCtrl = require('../controllers/isAlive');
 
 const router = express.Router();
-router.get("/", isAliveCtrl.isAlive);
+router.get('/', isAliveCtrl.isAlive);
 module.exports = router;

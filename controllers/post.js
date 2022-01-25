@@ -25,3 +25,8 @@ exports.getAllPost = (req, res, next) => {
 exports.viewReq = (req, res) => {
     console.log(req);
 }
+
+
+exports.viewReq = (req, res) => {
+    console.log(req);
+}

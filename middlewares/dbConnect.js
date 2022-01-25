@@ -65,8 +65,7 @@ exports.addUser = (req, hashedPass) => {
                     connection.release();
                     // Handle error after the release.
                     if (error) throw error;
-                    res.locals.SQLResponse = results;
-                    next();
+                    return results;
                 });
         });
     };

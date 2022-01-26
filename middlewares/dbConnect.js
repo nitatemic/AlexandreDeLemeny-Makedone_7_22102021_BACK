@@ -25,7 +25,7 @@ exports.addUser = (req, hashedPass) => {
     // Use the connection
     // eslint-disable-next-line max-len
     connection.query(
-      `INSERT INTO users VALUES(NULL, ${pool.escape(req.body.firstName)}, ${pool.escape(req.body.lastName)}, ${pool.escape(req.body.mail)}, '${hashedPass}');`,
+      `INSERT INTO users VALUES(NULL, ${pool.escape(req.body.firstName)}, ${pool.escape(req.body.lastName)}, ${pool.escape(req.body.mail)}, '${hashedPass}', 0 );`,
       (error, results) => {
         console.log(results);
         // When done with the connection, release it.
@@ -44,7 +44,7 @@ exports.getCredentials = (req, res, next) => {
     // Use the connection
     // eslint-disable-next-line max-len
     connection.query(
-      `SELECT Pass, PersonID FROM users WHERE mail = ${pool.escape(req.body.mail)};`,
+      `SELECT Pass, PersonID, IsAdmin FROM users WHERE mail = ${pool.escape(req.body.mail)};`,
       (error, results) => {
         // When done with the connection, release it.
         connection.release();

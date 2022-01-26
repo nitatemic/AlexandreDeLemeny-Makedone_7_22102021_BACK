@@ -55,9 +55,12 @@ exports.refreshToken = (req, res) => {
       return;
     }
     res.status(200).json({
+      PersonID: decoded.PersonID,
+      IsAdmin : decoded.IsAdmin,
       token: jwt.sign(
         {
           PersonID: decoded.PersonID,
+          IsAdmin : decoded.IsAdmin
         },
         process.env.SECRET,
         {

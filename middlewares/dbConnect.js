@@ -88,7 +88,7 @@ exports.getPostsFromTo = (req, res, next) => {
     // Use the connection
     // eslint-disable-next-line max-len
     connection.query(
-      `SELECT Title, Body, CreationDate, Prenom, Nom, PostID FROM posts p INNER JOIN users u ON p.Author=u.PersonID ORDER BY p.PostID DESC LIMIT ${req.params.from}, ${req.params.to};`,
+      `SELECT Title, Body, CreationDate, Prenom, Nom, PostID, PersonID FROM posts p INNER JOIN users u ON p.Author=u.PersonID ORDER BY p.PostID DESC LIMIT ${req.params.from}, ${req.params.to};`,
       (error, results) => {
         // When done with the connection, release it.
         connection.release();
@@ -108,7 +108,7 @@ exports.getPostFromDB = (req, res, next) => {
     // Use the connection
     // eslint-disable-next-line max-len
     connection.query(
-      `SELECT Title, Body, CreationDate, Prenom, Nom, PostID FROM posts p INNER JOIN users u ON p.Author=u.PersonID ORDER BY p.PostID DESC;`,
+      `SELECT Title, Body, CreationDate, Prenom, Nom, PostID, PersonID FROM posts p INNER JOIN users u ON p.Author=u.PersonID ORDER BY p.PostID DESC;`,
       (error, results) => {
         // When done with the connection, release it.
         connection.release();
@@ -148,7 +148,7 @@ exports.getCommentFromDB = (req, res, next) => {
     // Use the connection
     // eslint-disable-next-line max-len
     connection.query(
-      `SELECT CommentBody, CreationDate, Prenom, Nom, CommentID FROM comments c INNER JOIN users u ON c.Author=u.PersonID  WHERE c.PostID = ${req.params.PostID};`,
+      `SELECT CommentBody, CreationDate, Prenom, Nom, CommentID, PersonID FROM comments c INNER JOIN users u ON c.Author=u.PersonID  WHERE c.PostID = ${req.params.PostID};`,
       (error, results) => {
         // When done with the connection, release it.
         connection.release();
@@ -168,7 +168,7 @@ exports.getCommentsFromTo = (req, res, next) => {
     // Use the connection
     // eslint-disable-next-line max-len
     connection.query(
-      `SELECT CommentBody, CreationDate, Prenom, Nom, CommentID FROM comments c INNER JOIN users u ON c.Author=u.PersonID  WHERE c.PostID = ${req.params.PostID} ORDER BY c.CommentID DESC LIMIT ${req.params.from}, ${req.params.to};`,
+      `SELECT CommentBody, CreationDate, Prenom, Nom, CommentID, PersonID FROM comments c INNER JOIN users u ON c.Author=u.PersonID  WHERE c.PostID = ${req.params.PostID} ORDER BY c.CommentID DESC LIMIT ${req.params.from}, ${req.params.to};`,
       (error, results) => {
         // When done with the connection, release it.
         connection.release();

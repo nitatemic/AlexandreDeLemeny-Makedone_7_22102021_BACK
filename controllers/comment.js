@@ -19,7 +19,7 @@ exports.getAllComment = (req, res) => {
 
 // Fonction qui supprime un commentaire
 exports.deleteComment = (req, res) => {
-  res.status(200).json({
+  res.status(204).json({
     message: 'Comment deleted!',
   });
 };

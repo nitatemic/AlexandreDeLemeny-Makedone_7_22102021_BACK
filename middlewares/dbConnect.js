@@ -220,3 +220,42 @@ exports.deleteCommentFromDB = (req, res, next) => {
     );
   });
 };
+
+// Fonction de suppression d'un post
+exports.deletePostFromDB = (req, res, next) => {
+  pool.getConnection((err, connection) => {
+    if (err) throw err; // not connected!
+    // Use the connection
+    // eslint-disable-next-line max-len
+    connection.query(
+      `SELECT Author FROM posts WHERE PostID = ${req.params.PostID};`,
+      (error, results) => {
+        // When done with the connection, release it.
+        connection.release();
+        // Handle error after the release.
+        if (error) throw error;
+        if (results[0].Author === res.locals.PersonID) {
+          pool.getConnection((err, connection) => {
+            if (err) throw err; // not connected!
+            // Use the connection
+            // eslint-disable-next-line max-len
+            connection.query(
+              `DELETE FROM posts WHERE PostID = ${req.params.PostID};`,
+              (error, results) => {
+                // When done with the connection, release it.
+                connection.release();
+                // Handle error after the release.
+                if (error) throw error;
+                res.locals.SQLResponse = results;
+                next();
+              },
+            );
+          });
+        } else {
+          res.locals.SQLResponse = 'You are not the author of this Post! You can\'t delete it.';
+          next();
+        }
+      },
+    );
+  });
+};

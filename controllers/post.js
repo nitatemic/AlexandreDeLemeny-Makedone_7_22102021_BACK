@@ -13,3 +13,10 @@ exports.addPost = (req, res, next) => {
 exports.getAllPost = (req, res, next) => {
   next();
 };
+
+// Fonction qui supprime un commentaire
+exports.deletePost = (req, res) => {
+  res.status(204).json({
+    message: 'Post deleted!',
+  });
+};

@@ -234,11 +234,11 @@ exports.deletePostFromDB = (req, res, next) => {
         connection.release();
         // Handle error after the release.
         if (error) throw error;
+        console.log(res.locals.PostID);
         if (results[0].Author === res.locals.PersonID) {
           pool.getConnection((err, connection) => {
             if (err) throw err; // not connected!
             // Use the connection
-            // eslint-disable-next-line max-len
             connection.query(
               `DELETE FROM posts WHERE PostID = ${req.params.PostID};`,
               (error, results) => {

@@ -56,6 +56,8 @@ exports.verifyToken = (req, res, next) => {
   try {
     const decoded = jwt.verify(token, SECRET);
     res.locals.PersonID = decoded.PersonID;
+    res.locals.IsAdmin = decoded.IsAdmin;
+    console.log(decoded);
     next();
   } catch (error) {
     return res.status(401).json({

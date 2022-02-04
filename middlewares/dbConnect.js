@@ -194,7 +194,8 @@ exports.deleteCommentFromDB = (req, res, next) => {
         connection.release();
         // Handle error after the release.
         if (error) throw error;
-        if (results[0].Author === res.locals.PersonID) {
+        if (results[0].Author === res.locals.PersonID || (res.locals.IsAdmin === 1)) {
+          console.log("coucou")
           pool.getConnection((err, connection) => {
             if (err) throw err; // not connected!
             // Use the connection
@@ -234,13 +235,13 @@ exports.deletePostFromDB = (req, res, next) => {
         connection.release();
         // Handle error after the release.
         if (error) throw error;
-        console.log(res.locals.PostID);
-        if (results[0].Author === res.locals.PersonID) {
+        console.log(req.params.PostID);
+        if ((results[0].Author === res.locals.PersonID) || (res.locals.IsAdmin === 1)) {
           pool.getConnection((err, connection) => {
             if (err) throw err; // not connected!
             // Use the connection
             connection.query(
-              `DELETE FROM posts WHERE PostID = ${req.params.PostID};`,
+              `DELETE FROM posts WHERE PostID = ${req.params.PostID} LIMIT 1 ;`,
               (error, results) => {
                 // When done with the connection, release it.
                 connection.release();

@@ -3,9 +3,11 @@ require('dotenv').config();
 
 // Fonction appel le middleware addComment pour ajouter un commentaire à la BBD
 exports.addComment = (req, res, next) => {
-  dbConnectMiddleware.addCommentToDB(req, res, next);
-  res.status(201).json({
-    message: 'Comment added!',
+  dbConnectMiddleware.addCommentToDB(req, res, () => {
+    res.status(201).json({
+      message: 'Comment added',
+      post: res.locals.SQLResponse[0],
+    });
   });
 };
 

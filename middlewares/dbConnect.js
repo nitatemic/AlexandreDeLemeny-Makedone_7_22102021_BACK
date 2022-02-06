@@ -32,8 +32,7 @@ exports.addUser = (req, hashedPass) => {
         connection.release();
         // Handle error after the release.
         if (error) throw error;
-      },
-    );
+      })
   });
 };
 
@@ -61,21 +60,38 @@ exports.getCredentials = (req, res, next) => {
 exports.addPostToDB = (req, res, next) => {
   pool.getConnection((err, connection) => {
     if (err) throw err; // not connected!
-
     const imageUrl = `${req.protocol}://${req.get('host')}/public/images/posts/${req.file.filename}`;
     // Use the connection
     // eslint-disable-next-line max-len
     connection.query(
-      `INSERT INTO posts VALUES (NULL, ${mysql.escape(req.body.title)}, '${imageUrl}', '${res.locals.PersonID}', NULL);`,
+      `INSERT INTO posts
+       VALUES (NULL, ${mysql.escape(req.body.title)}, '${imageUrl}', '${res.locals.PersonID}',
+               NULL);`,
       (error, results) => {
-        // When done with the connection, release it.
-        connection.release();
-        // Handle error after the release.
         if (error) throw error;
-        return results;
+        // When done with the connection, release it.
+        let postID = results.insertId;
+        console.log(postID)
+        connection.query(
+          `SELECT Title, Body, CreationDate, Prenom, Nom, PostID, PersonID
+           FROM posts p
+                    INNER JOIN users u ON p.Author = u.PersonID
+           WHERE p.PostID = ${postID}
+           LIMIT 1;`,
+          (error, results) => {
+            console.log(results);
+            // When done with the connection, release it.
+            connection.release();
+            // Handle error after the release.
+            if (error) throw error;
+            //Renvoyer le résultat à la fonction qui a appelé la fonction
+            res.locals.SQLResponse = results;
+            next();
+          },
+        );
       },
     );
-  });
+  })
 };
 
 exports.getPostsFromTo = (req, res, next) => {
@@ -195,7 +211,6 @@ exports.deleteCommentFromDB = (req, res, next) => {
         // Handle error after the release.
         if (error) throw error;
         if (results[0].Author === res.locals.PersonID || (res.locals.IsAdmin === 1)) {
-          console.log("coucou")
           pool.getConnection((err, connection) => {
             if (err) throw err; // not connected!
             // Use the connection

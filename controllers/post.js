@@ -2,10 +2,13 @@ const dbConnectMiddleware = require('../middlewares/dbConnect');
 require('dotenv').config();
 
 // Fonction qui appel le middleware addPost pour ajouter un post à la BDD
-exports.addPost = (req, res, next) => {
-  dbConnectMiddleware.addPostToDB(req, res, next);
-  res.status(201).json({
-    message: 'Post added!',
+exports.addPost = (req, res) => {
+  // Attendre la réponse de la fonction addPostToDB pour renvoyer le résultat
+  dbConnectMiddleware.addPostToDB(req, res, () => {
+    res.status(201).json({
+      message: 'Post added',
+      post: res.locals.SQLResponse[0],
+    });
   });
 };
 

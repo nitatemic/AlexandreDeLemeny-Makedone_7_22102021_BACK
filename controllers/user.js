@@ -68,7 +68,7 @@ exports.refreshToken = (req, res) => {
         },
       ),
       message: 'Posts fetched!',
-      posts: res.locals.SQLResponse,
+      posts: res.locals.SQLResponse,    // Why ?
     });
   });
 };

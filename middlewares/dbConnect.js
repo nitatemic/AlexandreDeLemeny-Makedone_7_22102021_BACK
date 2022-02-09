@@ -294,15 +294,14 @@ exports.getUserInfo = (req, res, next) => {
   pool.getConnection((err, connection) => {
     if (err) throw err; // not connected!
     // Use the connection
-    // eslint-disable-next-line max-len
     connection.query(
-      `SELECT * FROM users WHERE PersonID = ${req.params.PersonID};`,
+      `SELECT Prenom, Nom, Mail FROM users WHERE PersonID = ${res.locals.PersonID};`,
       (error, results) => {
         // When done with the connection, release it.
         connection.release();
         // Handle error after the release.
         if (error) throw error;
-        res.locals.SQLResponse = results;
+        res.locals.user = results;
         next();
       },
     );

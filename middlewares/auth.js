@@ -5,14 +5,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // To parse the incoming requests with JSON payloads
 require('dotenv').config();
 
-const {SECRET} = process.env;
+const { SECRET } = process.env;
 const jwt = require('jsonwebtoken');
 
 exports.checkMail = (req, res, next) => {
   if (
     !req.body.mail.match(
       // eslint-disable-next-line max-len
-      /^([a-z0-9]+(?:[._-][a-z0-9]+)*)@([a-z0-9]+(?:[.-][a-z0-9]+)*\.[a-z]{2,})$/i
+      /^([a-z0-9]+(?:[._-][a-z0-9]+)*)@([a-z0-9]+(?:[.-][a-z0-9]+)*\.[a-z]{2,})$/i,
     )
   ) {
     return res.status(400).json({

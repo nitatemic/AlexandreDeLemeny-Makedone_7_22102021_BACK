@@ -15,8 +15,10 @@ exports.addComment = (req, res) => {
         error: 'Erreur lors de l\'ajout du commentaire',
       });
     } else {
+
       res.status(201).json({
         message: 'Commentaire ajouté',
+        comment: res.locals.SQLResponse[0]
       });
     }
   });

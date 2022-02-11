@@ -18,7 +18,7 @@ exports.addComment = (req, res) => {
 
       res.status(201).json({
         message: 'Commentaire ajouté',
-        comment: res.locals.SQLResponse[0]
+        comment: res.locals.SQLResponse[0],
       });
     }
   });

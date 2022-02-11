@@ -3,10 +3,15 @@ const dbConnectMiddleware = require('../middlewares/dbConnect');
 // Fonction appel le middleware addComment pour ajouter un commentaire à la BBD
 exports.addComment = (req, res) => {
   dbConnectMiddleware.addCommentToDB(req, res, () => {
-    res.status(201).json({
-      message: 'Comment added',
-      post: res.locals.SQLResponse[0],
-    });
+    if (res.statusCode === 500) {
+      res.status(500).json({
+        error: 'Erreur lors de l\'ajout du commentaire',
+      });
+    } else {
+      res.status(201).json({
+        message: 'Commentaire ajouté',
+      });
+    }
   });
 };
 

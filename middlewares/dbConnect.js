@@ -158,29 +158,36 @@ exports.addCommentToDB = (req, res, next) => {
   pool.getConnection((err, connection) => {
     if (err) throw err; // not connected!
     // Use the connection
-    // eslint-disable-next-line max-len
     connection.query(
       `INSERT INTO comments VALUES (NULL, ${res.locals.PersonID}, ${pool.escape(req.body.CommentBody)}, ${req.body.PostID}, NULL)`,
       (error, results) => {
-        let commentID = results.insertId;
-        console.log(commentID)
-        connection.query(
-          `SELECT CommentBody, CreationDate, Prenom, Nom, CommentID, PersonID
+        if (error) {
+          res.statusCode = 500;
+        } else {
+          if (results.insertId) {
+            let commentID = results.insertId;
+            connection.query(
+                `SELECT CommentBody, CreationDate, Prenom, Nom, CommentID, PersonID
            FROM comments c
                     INNER JOIN users u ON c.Author = u.PersonID
            WHERE c.CommentID = ${commentID}
            LIMIT 1;`,
-          (error, results) => {
-            console.log(results);
-            // When done with the connection, release it.
-            connection.release();
-            // Handle error after the release.
-            if (error) throw error;
-            //Renvoyer le résultat à la fonction qui a appelé la fonction
-            res.locals.SQLResponse = results;
-            next();
-          },
-        );
+                (error, results) => {
+                  if (error) {
+                    res.statusCode = 500;
+                  } else {
+                    res.statusCode = 200;
+                    res.locals.SQLResponse = results;
+                  }
+                  connection.release();
+                  next();
+                },
+            );
+
+          } else {
+            res.statusCode = 500;
+          }
+        }
       },
     );
   });

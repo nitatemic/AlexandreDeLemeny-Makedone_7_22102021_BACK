@@ -18,19 +18,39 @@ const pool = mysql.createPool({
 
 // Add user to database
 
-exports.addUser = (req, hashedPass) => {
+exports.addUser = (req, res, hashedPass, next) => {
   pool.getConnection((err, connection) => {
     if (err) throw err; // not connected!
     // Use the connection
-    connection.query(
-      `INSERT INTO users VALUES(NULL, ${pool.escape(req.body.firstName)}, ${pool.escape(req.body.lastName)}, ${pool.escape(req.body.mail)}, '${hashedPass}', 0 );`,
-      (error, results) => {
-        console.log(results);
-        // When done with the connection, release it.
-        connection.release();
-        // Handle error after the release.
-        if (error) throw error;
-      })
+    try {
+      connection.query(
+          `INSERT INTO users VALUES(NULL, ${pool.escape(req.body.firstName)}, ${pool.escape(req.body.lastName)}, ${pool.escape(req.body.mail)}, '${hashedPass}', 0 );`,
+          (error, results) => {
+            if(error){
+            if(error.code === 'ER_DUP_ENTRY' || error.errno === 1062)
+            {
+              res.statusCode = 400;
+              connection.release();
+              next();
+            }
+            else{
+              console.log('Other error in the query')
+              res.statusCode = 500;
+              connection.release();
+              next();
+            }
+          } else{
+            console.log('No error in the query')
+            res.statusCode = 200;
+            connection.release();
+            next();
+          }
+          })
+    }
+    catch (error) {
+      console.log(error);
+      next();
+    }
   });
 };
 

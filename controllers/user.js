@@ -5,11 +5,31 @@ require('dotenv').config();
 
 /* ---------- Creation d'user ---------- */
 exports.createUser = (req, res) => {
-  argon2.hash(req.body.password).then((hashedPass) => {
-    dbConnectMiddleware.addUser(req, hashedPass);
-  }).then(() => res.status(201).json({
-      message: 'User created!',
-    }));
+  //Faire le hash du mot de passe
+  try {
+    argon2.hash(req.body.password)
+      .then(async (hash) => {
+          await dbConnectMiddleware.addUser(req, res, hash, () => {
+            if (res.statusCode === 400) {
+              return res.status(400).json({
+                error: 'Bad request',
+                message: 'Email already used'
+              });
+            } else if ( res.statusCode === 500 ) {
+              return res.status(500).json({
+                error: 'Internal server error',
+                message: 'Error while creating user'
+              });
+            } else {
+              return res.status(201).json({
+                message: 'User created'
+              });
+            }
+          });
+        })
+  } catch (err) {
+    console.log(err);
+    }
 };
 /* ---------- Fin creation d'user ---------- */
 

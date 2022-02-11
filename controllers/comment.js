@@ -2,6 +2,13 @@ const dbConnectMiddleware = require('../middlewares/dbConnect');
 
 // Fonction appel le middleware addComment pour ajouter un commentaire à la BBD
 exports.addComment = (req, res) => {
+  // Vérifier que tous les champs sont remplis
+  if (!req.body.CommentBody || !req.body.PostID) {
+    return res.status(400).send({
+      message: 'Veuillez remplir tout les champs',
+    });
+  }
+
   dbConnectMiddleware.addCommentToDB(req, res, () => {
     if (res.statusCode === 500) {
       res.status(500).json({

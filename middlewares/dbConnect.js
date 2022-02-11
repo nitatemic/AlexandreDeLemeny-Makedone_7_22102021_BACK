@@ -21,9 +21,7 @@ const pool = mysql.createPool({
 exports.addUser = (req, hashedPass) => {
   pool.getConnection((err, connection) => {
     if (err) throw err; // not connected!
-
     // Use the connection
-    // eslint-disable-next-line max-len
     connection.query(
       `INSERT INTO users VALUES(NULL, ${pool.escape(req.body.firstName)}, ${pool.escape(req.body.lastName)}, ${pool.escape(req.body.mail)}, '${hashedPass}', 0 );`,
       (error, results) => {
@@ -39,9 +37,7 @@ exports.addUser = (req, hashedPass) => {
 exports.getCredentials = (req, res, next) => {
   pool.getConnection((err, connection) => {
     if (err) throw err; // not connected!
-
     // Use the connection
-    // eslint-disable-next-line max-len
     connection.query(
       `SELECT Pass, PersonID, IsAdmin FROM users WHERE mail = ${pool.escape(req.body.mail)};`,
       (error, results) => {
@@ -135,6 +131,7 @@ exports.getPostFromDB = (req, res, next) => {
     );
   });
 };
+
 
 // Fonction qui ajoute un post à la base de données
 exports.addCommentToDB = (req, res, next) => {

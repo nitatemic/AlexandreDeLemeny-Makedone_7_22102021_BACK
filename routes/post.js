@@ -10,7 +10,7 @@ const userCtrl = require('../controllers/user');
 // On utilise multer pour filtrer les fichiers qui ne sont pas des images
 const upload = multer({
   dest: './public/images/posts',
-  fileFilter: function(req, file, cb) {
+  fileFilter(req, file, cb) {
     console.log(file);
     if (!file.originalname.match(/\.(gif|jpeg|png|jpg)$/)) {
       return cb(new Error('Please upload an image'));

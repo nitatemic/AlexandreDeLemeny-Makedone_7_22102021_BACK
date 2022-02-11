@@ -318,6 +318,46 @@ exports.deleteUser = (req, res, next) => {
       (error, results) => {
         // When done with the connection, release it.
         connection.release();
+        // Handle error after the release.g
+        if (error) throw error;
+        res.locals.SQLResponse = results;
+        next();
+      },
+    );
+  });
+};
+
+// Fonction qui récupère le hash du mot de passe
+exports.getPasswordHash = (req, res, next) => {
+  pool.getConnection((err, connection) => {
+    if (err) throw err; // not connected!
+    // Use the connection
+    connection.query(
+      `SELECT Pass FROM users WHERE PersonID = ${res.locals.PersonID};`,
+      (error, results) => {
+        // When done with the connection, release it.
+        connection.release();
+        // Handle error after the release.
+        if (error) throw error;
+        res.locals.PasswordHash = results[0].Pass;
+        next();
+      },
+    );
+  });
+};
+
+// Fonction qui change le mot de passe
+exports.updatePasswordHashInDB = (req, res, next) => {
+  pool.getConnection((err, connection) => {
+    if (err) throw err; // not connected!
+    console.log("ici")
+    console.log(res.locals);
+    // Use the connection
+    connection.query(
+      `UPDATE users SET Pass = '${res.locals.newPasswordHash}' WHERE PersonID = ${res.locals.PersonID};`,
+      (error, results) => {
+        // When done with the connection, release it.
+        connection.release();
         // Handle error after the release.
         if (error) throw error;
         res.locals.SQLResponse = results;

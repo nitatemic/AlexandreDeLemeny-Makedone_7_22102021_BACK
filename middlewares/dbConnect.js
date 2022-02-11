@@ -51,8 +51,7 @@ exports.getCredentials = (req, res, next) => {
         if (error) throw error;
         res.locals.SQLResponse = results;
         next();
-      },
-    );
+      });
   });
 };
 
@@ -366,3 +365,21 @@ exports.updatePasswordHashInDB = (req, res, next) => {
     );
   });
 };
+
+exports.deleteAccountInDB = (req, res, next) => {
+  pool.getConnection((err, connection) => {
+    if (err) throw err; // not connected!
+    // Use the connection
+    connection.query(
+      `DELETE FROM users WHERE PersonID = ${res.locals.PersonID};`,
+      (error, results) => {
+        // When done with the connection, release it.
+        connection.release();
+        // Handle error after the release.
+        if (error) throw error;
+        res.locals.SQLResponse = results;
+        next();
+      },
+    );
+  });
+}

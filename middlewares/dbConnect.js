@@ -216,6 +216,7 @@ exports.getCommentFromDB = (req, res, next) => {
   });
 };
 
+
 exports.getCommentsFromTo = (req, res, next) => {
   pool.getConnection((err, connection) => {
     if (err) throw err; // not connected!
@@ -321,7 +322,7 @@ exports.getUserInfo = (req, res, next) => {
     if (err) throw err; // not connected!
     // Use the connection
     connection.query(
-      `SELECT Prenom, Nom, Mail FROM users WHERE PersonID = ${res.locals.PersonID};`,
+      `SELECT Prenom, Nom, Mail, PersonID FROM users WHERE PersonID = ${res.locals.PersonID};`,
       (error, results) => {
         // When done with the connection, release it.
         connection.release();

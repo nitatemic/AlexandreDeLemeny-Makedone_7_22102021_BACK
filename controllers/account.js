@@ -4,7 +4,7 @@ const dbConnectMiddleware = require('../middlewares/dbConnect');
 // Fonction qui appel le middleware qui fait l'appel des informations de profil à la BDD
 exports.getUserInfos = (req, res) => {
   res.status(200).json({
-    user: res.locals.user,
+    user : res.locals.user,
   });
 };
 
@@ -12,13 +12,13 @@ exports.getUserInfos = (req, res) => {
 exports.updatePassword = async (req, res) => {
   const {
     newPassword,
-    newPasswordConfirm,
+    confirmPassword,
   } = req.body;
 
   // On vérifie que les champs sont remplis
   if (
       !newPassword
-      || !newPasswordConfirm
+      || !confirmPassword
   ) {
     return res.status(400).json({
       error: 'Tous les champs doivent être remplis',
@@ -43,7 +43,7 @@ exports.updatePassword = async (req, res) => {
 
   console.log("coucou")
   // On vérifie que les mots de passe sont identiques
-  if (newPassword !== newPasswordConfirm) {
+  if (newPassword !== confirmPassword) {
     return res.status(400).json({
       error: 'Les mots de passe ne sont pas identiques',
     });

@@ -11,16 +11,14 @@ exports.addComment = (req, res) => {
 
   dbConnectMiddleware.addCommentToDB(req, res, () => {
     if (res.statusCode === 500) {
-      res.status(500).json({
+      return res.status(500).json({
         error: 'Erreur lors de l\'ajout du commentaire',
       });
-    } else {
-
-      res.status(201).json({
-        message: 'Commentaire ajouté',
-        comment: res.locals.SQLResponse[0],
-      });
     }
+    return res.status(201).json({
+      message: 'Commentaire ajouté',
+      comment: res.locals.SQLResponse[0],
+    });
   });
 };
 

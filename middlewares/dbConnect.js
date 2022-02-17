@@ -162,7 +162,9 @@ exports.addCommentToDB = (req, res, next) => {
       `INSERT INTO comments VALUES (NULL, ${res.locals.PersonID}, ${pool.escape(req.body.CommentBody)}, ${req.body.PostID}, NULL)`,
       (error, results) => {
         if (error) {
+          console.error(error);
           res.statusCode = 500;
+          next();
         } else {
           if (results.insertId) {
             let commentID = results.insertId;
@@ -180,6 +182,7 @@ exports.addCommentToDB = (req, res, next) => {
                     res.locals.SQLResponse = results;
                   }
                   connection.release();
+
                   next();
                 },
             );

@@ -70,22 +70,6 @@ console.log(res.locals.newPasswordHash);
 
 //Fonction de suppression de compte
 exports.deleteAccount = async (req, res) => {
-  //Vérifier que le mot de passe est correct
-  if (
-      !req.body.password
-  ) {
-    return res.status(400).json({
-      error: 'Tous les champs doivent être remplis',
-    });
-  }
-
-  if (await argon2.verify(res.locals.PasswordHash, req.body.password) ===
-      false) {
-    return res.status(400).json({
-      error: 'Le mot de passe est incorrect',
-    });
-  }
-
   //Supprimer le compte
   dbConnectMiddleware.deleteAccountInDB(req, res, () => {
     res.status(200).json({

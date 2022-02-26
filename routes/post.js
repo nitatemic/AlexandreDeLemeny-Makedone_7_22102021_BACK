@@ -6,7 +6,6 @@ const postController = require('../controllers/post');
 const userCtrl = require('../controllers/user');
 
 // Intercepter un fichier dans la requête est le stocker dans un dossier
-// On utilise multer pour stocker le fichier dans le dossier saucePic
 // On utilise multer pour filtrer les fichiers qui ne sont pas des images
 const upload = multer({
   dest: './public/images/posts',
